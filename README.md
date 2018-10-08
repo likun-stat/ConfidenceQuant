@@ -15,6 +15,6 @@ The approach has broad applications, including analysis of massive spatial data 
 
 We illustrate the methodologyby comparing daily summertime maximum temperature projections from NASA’s Earth Exchange climate models. We consider two different CO2 emissions scenarios, and compare projections over the continental United States for the mid and late 21st Century, respectively.
 
-![plot1](plots/T0_5.png}
+![plot1](plots/T0_5.png)
 
 ![plot2](plots/USA0_5_50.png)
