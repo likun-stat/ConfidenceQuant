@@ -1,0 +1,128 @@
+#'Smoothness Selection for Quantile Smoothing Splines.
+#'
+#'
+#'\code{lambdaSearch} finds the best smoothing parameter \eqn{\lambda} by
+#' minimizing the multifold crossvalidation (MCV) criterion for a given
+#' dataset
+#'
+#'If \code{autosearch=FALSE}, this function first roughly draws a plot of MCV
+#'vs. \eqn{\lambda} values, after which an initial upper bound for finding the
+#'optimum \eqn{\lambda} can be specified by the user.  (This was implemnted
+#' due to the numerical issues caused by \code{\link{rqss}}. Those
+#'  issues can make the curve oscillate dramatically, which would make
+#'\code{\link{optimize}} fail to find a valid minimum.)
+#'
+#'If \code{autosearch=TRUE}, the function chooses automatically a range
+#'for \code{\link{optimize}}.
+#'
+#'@import quantreg
+#'@import doParallel
+#'@import foreach
+#'@import tripack
+#'
+#'@param cores The number of cores to use for parallel execution. If not
+#'  specified, the number of cores is set to the value of
+#'  \code{options("cores")}, if specified, or to one-half the number of cores
+#'  detected by the \code{\link{parallel}} package.
+#'@param data A 2- or 3-dim data frame (or object coercible by
+#'  \code{\link{as.data.frame}} to a data frame) for which we are selecting the
+#'  smoothing parameter.
+#'@param tau A specific quantile to be estimated. Must be a number between 0 and
+#'  1.
+#'@param nfolds The number of folds for the cross validation.
+#'@param init.upper An initial upper bound used for lambda search; the default
+#'  value is 15.
+#'@param init.lower An initial lower bound used for lambda search; the default
+#'  value is 0.
+#'@param resolution Resolution used for plotting the MCV figure.
+#'@param autosearch if \code{FALSE} (which is recommended), then the function
+#'  will show the MCV plot to the user who will be asked to enter an upper bound
+#'   for conducting the search for \eqn{\lambda}. If \code{TRUE},
+#'  then the function will automatically choose the upper bound.
+#'@param tol The desired accuracy tolerance for \code{\link{optimize}}.
+#'
+#'
+#'@return After some time, the optimum \eqn{\lambda} is returned.
+#'@examples
+#' data(one)    #1 covariate
+#'
+#' ##1. The function can find lambda automatically
+#' lambda<-lambdaSearch(cores=3,data=one,tau=0.5,nfolds=10,init.upper=15,resolution=0.1,autosearch=TRUE)
+#' lambda
+#'
+#' ##2. Or you can look at the plot and then decide an upper bound for lambda search
+#' lambda<-lambdaSearch(cores=3,data=one,tau=0.5,nfolds=10,init.upper=15,resolution=0.1,autosearch=FALSE)
+#'
+#' data(two)    #2 covariates
+#' lambda<-lambdaSearch(cores=3,data=two,tau=0.5,nfolds=10,init.upper=15,resolution=0.1,autosearch=FALSE)
+
+
+#'
+#'@references Reiss et al. (2012). \eqn{Smoothness Selection for penalized
+#'  Quantile Regression Splines}.
+#'@seealso \code{\link{foldsGenerator}, \link{multifoldCV},
+#'  \link{multifoldCV_2dim}}
+#'
+#'@export
+
+
+lambdaSearch<-function(cores=NULL,data=parent.frame(),tau=0.5,nfolds=10,init.lower=0,init.upper=15,resolution=0.1,autosearch=FALSE,tol=0.00001,INFO=FALSE){
+
+
+  if(missing(data)) stop("Missing data input!")
+  if(!(ncol(data) %in% c(2,3))) stop("Dimensions of data input incorrect. Need to have 2 or 3 COLUMNS!")
+  if(ncol(data)==2) if(!all(colnames(data)==c("x","y"))) {colnames(data)<-c("x","y")}
+  if(ncol(data)==3) if(!all(colnames(data)==c("x1","x2","y"))) {colnames(data)<-c("x1","x2","y")}
+
+
+  folds<-suppressWarnings(foldsGenerator(sim.data=data,nfolds=nfolds))
+  Lambda<-seq(init.lower,init.upper,by=resolution)
+  l<-length(Lambda)
+  cv<-rep(NA,l)
+
+  if(ncol(data)==2){
+    for(i in 1:l){
+      if(INFO) cat(paste(i,"out of ",l,"\n"))
+      cv[i]<-multifoldCV(cores=cores,lambda=Lambda[i],tau=tau,sim.data=data,cv.idx=folds)
+    }
+  }
+  else{
+    for(i in 1:l){
+      if(INFO) cat(paste(i,"out of ",l,"\n"))
+      cv[i]<-multifoldCV_2dim(cores=cores,lambda=Lambda[i],tau=tau,sim.data=data,cv.idx=folds)
+    }
+  }
+
+  if(autosearch){
+    # slopes<-(cv[-1]-cv[-l])/(Lambda[-1]-Lambda[-l])
+    # temp<-abs(slopes/mean(slopes))[-(1:40)]
+    # idx<-(which(temp>quantile(temp,0.95)))[1]
+    # upper<-Lambda[idx+40]
+    # lower<-init.lower
+    idx<-which.min(cv)
+    if(idx>1) lower<-Lambda[idx-1] else lower<-head(Lambda,1)
+    if(idx<l) upper<-Lambda[idx+1] else upper<-tail(Lambda,1)
+    if (INFO) cat(paste("λ Auto-search from ",lower," to",upper,"\n"))
+  }
+  else{
+    plot(Lambda,cv,type="l",xlab=expression(lambda),ylab="Multifold CV",main="Multifold CV criterion")
+    cat("Please type in lower/upper bound for λ search by examining the figure.")
+    temp <- readline(prompt="Enter lower bound for λ search followed by pressing RETURN: ")
+    lower<-as.numeric(temp)
+    temp <- readline(prompt="Enter upper bound for λ search followed by pressing RETURN: ")
+    upper<-as.numeric(temp)
+    idx<-(Lambda<upper+0.1)&(Lambda>lower-0.1)
+  }
+
+  if(ncol(data)==2) temp<-optimize(multifoldCV,interval=c(lower,upper),cores=cores,tau=tau,sim.data=data,cv.idx=folds,tol=tol)
+  if(ncol(data)==3) temp<-optimize(multifoldCV_2dim,interval=c(lower,upper),cores=cores,tau=tau,sim.data=data,cv.idx=folds,tol=tol)
+
+  if(!autosearch) {
+    L<-c(Lambda[idx],temp$minimum);C<-c(cv[idx],temp$objective)
+    plot(L[order(L)],C[order(L)],type="l",xlab=expression(lambda),ylab="Multifold CV",main="Multifold CV criterion")
+    cat(paste("Searching λ from ",lower," to",upper,"\n"))
+    points(temp$minimum,temp$objective,pch=20,col="red")
+    abline(v=temp$minimum,lty=2,col="red")
+  }
+  return(temp$minimum)
+}

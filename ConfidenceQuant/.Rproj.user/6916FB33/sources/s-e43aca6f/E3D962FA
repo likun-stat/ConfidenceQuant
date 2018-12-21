@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526503844763.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E3D962FA",
+    "lastKnownWriteTime" : 1526505009,
+    "last_content_update" : 1526505010596,
+    "path" : "~/Code/ConfidenceQuant/R/CompExperiment_2dim_boot.R",
+    "project_path" : "R/CompExperiment_2dim_boot.R",
+    "properties" : {
+        "cursorPosition" : "73,2",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

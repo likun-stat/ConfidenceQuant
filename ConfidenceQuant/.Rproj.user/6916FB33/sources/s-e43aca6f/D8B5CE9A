@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526496280706.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D8B5CE9A",
+    "lastKnownWriteTime" : 1526489696,
+    "last_content_update" : 1526489696,
+    "path" : "~/Code/ConfidenceQuant/R/foldsGenerator.R",
+    "project_path" : "R/foldsGenerator.R",
+    "properties" : {
+        "cursorPosition" : "27,34",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

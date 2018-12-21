@@ -1,0 +1,27 @@
+Package: ConfidenceQuant
+Type: Package
+Title: Computation of Confidence Bands and Regions for Comparative Experiments
+Version: 4.1.0
+Author: Likun Zhang <lfz5044@psu.edu>
+Maintainer: Likun Zhang <lfz5044@psu.edu>
+Description: The ConfidenceQuant R package developed for the computation of 
+    confidence bands and regions for comparative experiments fits Penalized 
+    Quantile Smoothing Splines using the rqss function in the quantreg package, 
+    developed by R. Koenker.
+License: Internal use.
+Depends:
+    quantreg
+Imports:
+    doParallel,
+    foreach,
+    splines,
+    tripack,
+    akima,
+    rootSolve,
+    plotly,
+    ggplot2,
+    grDevices,
+    scales
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1

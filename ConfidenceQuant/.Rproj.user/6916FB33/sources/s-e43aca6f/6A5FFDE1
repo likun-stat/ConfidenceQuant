@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526495928855.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6A5FFDE1",
+    "lastKnownWriteTime" : 1526494545,
+    "last_content_update" : 1526494545,
+    "path" : "~/Code/ConfidenceQuant/R/BLB_rqss.R",
+    "project_path" : "R/BLB_rqss.R",
+    "properties" : {
+        "cursorPosition" : "58,2",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

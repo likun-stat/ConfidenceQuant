@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526503847993.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EEC4350D",
+    "lastKnownWriteTime" : 1526503910,
+    "last_content_update" : 1526503910152,
+    "path" : "~/Code/ConfidenceQuant/R/CompExperiment_2dim_D.R",
+    "project_path" : "R/CompExperiment_2dim_D.R",
+    "properties" : {
+        "cursorPosition" : "84,78",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

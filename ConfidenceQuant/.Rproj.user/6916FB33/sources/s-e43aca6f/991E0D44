@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526497878603.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "991E0D44",
+    "lastKnownWriteTime" : 1526503194,
+    "last_content_update" : 1526503194582,
+    "path" : "~/Code/ConfidenceQuant/R/CompExperiment_1dim.R",
+    "project_path" : "R/CompExperiment_1dim.R",
+    "properties" : {
+        "cursorPosition" : "86,2",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
